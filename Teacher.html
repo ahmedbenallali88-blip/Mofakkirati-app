@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tableau Enseignant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>📚 Tableau Enseignant</h1>
+  <div class="container">
+    <input type="text" id="title" placeholder="Titre de la leçon">
+    <textarea id="content" rows="4" placeholder="Contenu de la leçon"></textarea>
+    <input type="text" id="video" placeholder="Lien vidéo (optionnel)">
+    <input type="text" id="file" placeholder="Lien fichier (optionnel)">
+    <button onclick="addLesson()">➕ Ajouter</button>
+    <div id="lessons"></div>
+  </div>
+
+  <script>
+    const lessonsDiv = document.getElementById('lessons');
+    const lessons = JSON.parse(localStorage.getItem('lessons') || '[]');
+
+    function renderLessons() {
+      lessonsDiv.innerHTML = '';
+      lessons.forEach((lesson, index) => {
+        lessonsDiv.innerHTML += `
+          <div class="lesson">
+            <h3>${lesson.title}</h3>
+            <p>${lesson.content}</p>
+            ${lesson.video ? `<p>🎥 <a href="${lesson.video}" target="_blank">Voir la vidéo</a></p>` : ''}
+            ${lesson.file ? `<p>📄 <a href="${lesson.file}" target="_blank">Télécharger le fichier</a></p>` : ''}
+            <button onclick="printLesson(${index})">🖨️ Imprimer</button>
+            <button onclick="deleteLesson(${index})">🗑️ Supprimer</button>
+          </div>
+        `;
+      });
+    }
+
+    function addLesson() {
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+      const video = document.getElementById('video').value;
+      const file = document.getElementById('file').value;
+      if (title && content) {
+        lessons.push({ title, content, video, file });
+        localStorage.setItem('lessons', JSON.stringify(lessons));
+        renderLessons();
+        document.getElementById('title').value = '';
+        document.getElementById('content').value = '';
+        document.getElementById('video').value = '';
+        document.getElementById('file').value = '';
+      }
+    }
+
+    function printLesson(index) {
+      const lesson = lessons[index];
+      const win = window.open('', '', 'width=800,height=600');
+      win.document.write(`<h1>${lesson.title}</h1><p>${lesson.content}</p>`);
+      win.print();
+    }
+
+    function deleteLesson(index) {
+      lessons.splice(index, 1);
+      localStorage.setItem('lessons', JSON.stringify(lessons));
+      renderLessons();
+    }
+
+    renderLessons();
+  </script>
+</body>
+</html>
