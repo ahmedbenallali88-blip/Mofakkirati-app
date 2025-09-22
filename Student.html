@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tableau Élève</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>🎓 Tableau Élève</h1>
+  <div class="container">
+    <div id="lessons"></div>
+  </div>
+
+  <script>
+    const lessonsDiv = document.getElementById('lessons');
+    const lessons = JSON.parse(localStorage.getItem('lessons') || '[]');
+
+    function renderLessons() {
+      lessonsDiv.innerHTML = '';
+      lessons.forEach((lesson, index) => {
+        lessonsDiv.innerHTML += `
+          <div class="lesson">
+            <h3>${lesson.title}</h3>
+            <p>${lesson.content}</p>
+            ${lesson.video ? `<p>🎥 <a href="${lesson.video}" target="_blank">Voir la vidéo</a></p>` : ''}
+            ${lesson.file ? `<p>📄 <a href="${lesson.file}" target="_blank">Télécharger le fichier</a></p>` : ''}
+            <button onclick="printLesson(${index})">🖨️ Imprimer</button>
+          </div>
+        `;
+      });
+    }
+
+    function printLesson(index) {
+      const lesson = lessons[index];
+      const win = window.open('', '', 'width=800,height=600');
+      win.document.write(`<h1>${lesson.title}</h1><p>${lesson.content}</p>`);
+      win.print();
+    }
+
+    renderLessons();
+  </script>
+</body>
+</html>
