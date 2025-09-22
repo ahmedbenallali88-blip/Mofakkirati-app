@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Connexion - Mofakkirati</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="box">
+    <h2>🔐 Connexion</h2>
+    <input type="text" id="username" placeholder="Nom d'utilisateur">
+    <select id="role">
+      <option value="teacher">Enseignant</option>
+      <option value="student">Élève</option>
+    </select>
+    <button onclick="login()">Entrer</button>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById('username').value;
+      const role = document.getElementById('role').value;
+      if (username) {
+        localStorage.setItem('user', JSON.stringify({ username, role }));
+        window.location.href = role + '.html';
+      }
+    }
+  </script>
+</body>
+</html>
